@@ -1,28 +1,24 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, { useState} from 'react';
+import TX from './tx/Tx';
+
 import './App.css';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
-}
+const DEFAULT_CHANNEL_VALUE = 1500;
 
-export default App;
+export default () => {
+  const [txValue, setTxValue] = useState({
+    t: DEFAULT_CHANNEL_VALUE,
+    a: DEFAULT_CHANNEL_VALUE,
+    e: DEFAULT_CHANNEL_VALUE,
+    r: DEFAULT_CHANNEL_VALUE
+  });
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        RX Calibrate
+      </header>
+      <TX onChange={value => setTxValue({...txValue, ...value})} values={txValue} />
+    </div>
+  )
+}
