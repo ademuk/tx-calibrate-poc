@@ -1,24 +1,28 @@
-import React, { useState} from 'react';
+import React, {useState} from 'react';
+import Calibrator from './calibrate/Calibrator';
 import TX from './tx/Tx';
 
 import './App.css';
 
-const DEFAULT_CHANNEL_VALUE = 1500;
 
 export default () => {
-  const [txValue, setTxValue] = useState({
-    t: DEFAULT_CHANNEL_VALUE,
-    a: DEFAULT_CHANNEL_VALUE,
-    e: DEFAULT_CHANNEL_VALUE,
-    r: DEFAULT_CHANNEL_VALUE
-  });
+  const [showTx, setShowTx] = useState(false);
+
+  const [txValue, setTxValue] = useState([
+    1500,
+    1500,
+    1500,
+    1500
+  ]);
 
   return (
     <div className="App">
       <header className="App-header">
-        RX Calibrate
+        <h1>RX Calibrate</h1>
       </header>
-      <TX onChange={value => setTxValue({...txValue, ...value})} values={txValue} />
+      <Calibrator onStartCalibration={() => setShowTx(true)} txValues={txValue} />
+
+      {showTx && <TX onChange={setTxValue} values={txValue} />}
     </div>
   )
 }
