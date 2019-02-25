@@ -1,12 +1,25 @@
 import React, {useState} from 'react';
 import ChannelDetect from './start/ChannelDetect';
+import useMsp from "../../msp/useMsp";
 
 
 const CHANNELS = [
-  'Throttle',
-  'Yaw',
-  'Pitch',
-  'Roll'
+  {
+    name: 'Throttle',
+    code: 'T'
+  },
+  {
+    name: 'Yaw',
+    code: 'R'
+  },
+  {
+    name: 'Pitch',
+    code: 'E'
+  },
+  {
+    name: 'Roll',
+    code: 'A'
+  }
 ];
 
 
@@ -20,6 +33,7 @@ export default ({txValues, onDone}) => {
   const [detectedChannels, setDetectedChannels] = useState({});
   const [initialMins, setMins] = useState(txValues);
   const [initialMaxs, setMaxs] = useState(txValues);
+  const [rxMap, setRxMap] = useMsp('rxmap');
 
   function onNext() {
     setCurrentChannel(currentChannel + 1);
@@ -30,6 +44,22 @@ export default ({txValues, onDone}) => {
       ...detectedChannels,
       [currentChannel]: channel
     });
+  }
+
+  function handleDone() {
+    const txToChannels = Object.keys(detectedChannels).reduce((prev, curr) => {
+      prev[detectedChannels[curr]] = curr;
+      return prev;
+    }, {});
+
+    const mapping = CHANNELS.map((channel, i) => {
+      const ch = txToChannels[i];
+      return CHANNELS[ch].code;
+    });
+
+    setRxMap(`${mapping.join('')}1234`);
+
+    onDone();
   }
 
   const maxVals = txValues.map((val, i) => Math.max(initialMaxs[i], val));
@@ -50,20 +80,20 @@ export default ({txValues, onDone}) => {
         <div key={i}>
           <pre>
           {value}
-          {channelIsAssigned > -1 && ` ${CHANNELS[channelIsAssigned]}`}
+          {channelIsAssigned > -1 && ` ${CHANNELS[channelIsAssigned].name}`}
           {channelIsAssigned > -1 && `[${minVals[i]}-${maxVals[i]}]`}
           </pre>
         </div>
       )
     })}
 
-    {CHANNELS.map((channel, i) => {
+    {CHANNELS.map(({name}, i) => {
       return currentChannel === i &&
-        <ChannelDetect name={channel}
+        <ChannelDetect name={name}
                        txValues={txValues}
                        detectedChannels={detectedChannels}
                        onDetect={handleDetect}
-                       key={channel} />
+                       key={name} />
     })}
 
     {currentChannel < CHANNELS.length - 1 &&
@@ -72,6 +102,6 @@ export default ({txValues, onDone}) => {
     </button>}
 
     {currentChannel === CHANNELS.length - 1 &&
-    <button onClick={onDone} disabled={currentChannel === Object.keys(detectedChannels).length}>Done</button>}
+    <button onClick={handleDone} disabled={currentChannel === Object.keys(detectedChannels).length}>Done</button>}
   </div>
 }
