@@ -22,7 +22,7 @@ export default () => {
       </header>
       <Calibrator onStartCalibration={() => setShowTx(true)} txValues={txValue} />
 
-      {showTx && <TX onChange={setTxValue} values={txValue} />}
+      {showTx && <TX values={txValue} onChange={setTxValue} />}
     </div>
   )
 }

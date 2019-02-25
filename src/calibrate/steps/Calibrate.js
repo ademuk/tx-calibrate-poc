@@ -18,7 +18,8 @@ export default ({txValues, onDone}) => {
 
   const [currentChannel, setCurrentChannel] = useState(0);
   const [detectedChannels, setDetectedChannels] = useState({});
-  const [detectedRxRanges, setDetectedRxRanges] = useState({});
+  const [initialMins, setMins] = useState(txValues);
+  const [initialMaxs, setMaxs] = useState(txValues);
 
   function onNext() {
     setCurrentChannel(currentChannel + 1);
@@ -31,22 +32,27 @@ export default ({txValues, onDone}) => {
     });
   }
 
-  function handleRange(min, max) {
-    setDetectedRxRanges({
-      ...detectedRxRanges,
-      [currentChannel]: [min, max]
-    })
+  const maxVals = txValues.map((val, i) => Math.max(initialMaxs[i], val));
+  const minVals = txValues.map((val, i) => Math.min(initialMins[i], val));
+
+  if (!initialMaxs.every((val, i) => val === maxVals[i])) {
+    setMaxs(maxVals);
+  }
+
+  if (!initialMins.every((val, i) => val === minVals[i])) {
+    setMins(minVals);
   }
 
   return <div>
-    {JSON.stringify(detectedChannels)}
-    {JSON.stringify(detectedRxRanges)}
     {txValues.map((value, i) => {
+      const channelIsAssigned = Object.values(detectedChannels).indexOf(i);
       return (
         <div key={i}>
+          <pre>
           {value}
-          {Object.values(detectedChannels).indexOf(i) > -1 && CHANNELS[Object.values(detectedChannels).indexOf(i)]}
-          {Object.values(detectedRxRanges).indexOf(i) > -1 && detectedRxRanges[Object.values(detectedChannels).indexOf(i)]}
+          {channelIsAssigned > -1 && ` ${CHANNELS[channelIsAssigned]}`}
+          {channelIsAssigned > -1 && `[${minVals[i]}-${maxVals[i]}]`}
+          </pre>
         </div>
       )
     })}
@@ -57,7 +63,6 @@ export default ({txValues, onDone}) => {
                        txValues={txValues}
                        detectedChannels={detectedChannels}
                        onDetect={handleDetect}
-                       onRange={handleRange}
                        key={channel} />
     })}
 
