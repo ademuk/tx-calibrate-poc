@@ -17,7 +17,12 @@ export default ({onStart}) => {
   }
 
   return rxRanges === null ? 'Loading' : <div>
-    {!isRxRangeDefault(rxRanges) && <p>Your rxrange has custom values. Running this calibrator will reset these.</p>}
+    <p>Before you start:</p>
+    <ul>
+      {!isRxRangeDefault(rxRanges) && <li>Your rxrange setting has custom values. Running this calibrator will reset these</li>}
+      <li>It is recommended that you reset any custom endpoints and/or trims on your transmitter</li>
+      <li>Power up you receiver and transmitter (Don't forget to remove your props if applicable)</li>
+    </ul>
 
     <button onClick={handleStart}>Start calibration</button>
 
