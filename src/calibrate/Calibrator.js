@@ -1,28 +1,36 @@
 import React, {useState} from 'react';
 import Initial from './steps/Initial'
 import Calibrate from './steps/Calibrate'
+import Done from './steps/Done'
+import styles from './Calibrator.module.css';
 
 const steps = {
   INITIAL: 'initial',
-  START: 'start'
+  CALIBRATE: 'calibrate',
+  DONE: 'done'
 };
 
 export default ({onStartCalibration, txValues}) => {
   const [step, setStep] = useState('initial');
 
   function handleStartCalibration() {
-    setStep(steps.START);
+    setStep(steps.CALIBRATE);
     onStartCalibration();
   }
 
-  function handleDone() {
+  function handleRestart() {
+    setStep(steps.INITIAL);
+  }
 
+  function handleDone() {
+    setStep(steps.DONE);
   }
 
   return (
-    <>
+    <div className={styles.Calibrator}>
       {step === steps.INITIAL && <Initial onStart={handleStartCalibration} />}
-      {step === steps.START && <Calibrate txValues={txValues} onDone={handleDone} />}
-    </>
+      {step === steps.CALIBRATE && <Calibrate txValues={txValues} onDone={handleDone} onRestart={handleRestart} />}
+      {step === steps.DONE && <Done onRestart={handleRestart} />}
+    </div>
   )
 }

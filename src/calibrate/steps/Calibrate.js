@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import ChannelDetect from './start/ChannelDetect';
+import ChannelDetect from './calibrate/ChannelDetect';
 import useMsp from "../../msp/useMsp";
-
+import styles from './Calibrate.module.css';
+import cx from 'classnames';
 
 const CHANNELS = [
   {
@@ -22,7 +23,7 @@ const CHANNELS = [
   }
 ];
 
-export default ({txValues, onDone}) => {
+export default ({txValues, onRestart, onDone}) => {
 
   if (txValues === null) {
     return 'Loading'
@@ -64,10 +65,7 @@ export default ({txValues, onDone}) => {
   }
 
   function handleRestart() {
-    setCurrentChannel(0);
-    setDetectedChannels({});
-    setMins(txValues);
-    setMaxs(txValues);
+    onRestart();
   }
 
   function handleApply() {
@@ -90,51 +88,81 @@ export default ({txValues, onDone}) => {
     setMins(minVals);
   }
 
-  return <div>
+  return <div className={styles.Calibrate}>
     {currentChannel !== CHANNELS.length && txValues.map((value, i) => {
       const channelIsAssigned = Object.values(detectedChannels).indexOf(i);
       return (
-        <div key={i}>
-          <code>
-          {value}
-          {channelIsAssigned > -1 && ` ${CHANNELS[channelIsAssigned].name}`}
-          {channelIsAssigned > -1 && `[${minVals[i]}-${maxVals[i]}]`}
-          </code>
+        <div key={i} className={styles.txChannelWrapper}>
+          <div className={styles.txChannel}>
+            <div className={styles.min}>
+              {minVals[i]}
+            </div>
+            <div className={styles.meter}>
+              <div className={cx(
+                  styles.fill,
+                  styles[`fill${i}`]
+                )} style={{left: `${((minVals[i] - 1000) / 10)}%`, right: `${((2000 - maxVals[i]) / 10)}%`}}></div>
+              <div class={styles.label}>{value}</div>
+            </div>
+            <div className={styles.max}>
+              {maxVals[i]}
+            </div>
+            <div className={styles.matchedChannel}>
+              {channelIsAssigned > -1 && ` ✔ ${CHANNELS[channelIsAssigned].name}`}
+            </div>
+          </div>
         </div>
       )
     })}
 
-    {CHANNELS.map(({name}, i) => {
-      return currentChannel === i &&
-        <ChannelDetect name={name}
-                       txValues={txValues}
-                       detectedChannels={detectedChannels}
-                       onDetect={handleDetect}
-                       key={name} />
-    })}
+    <div className={styles.ChannelDetect}>
+      {CHANNELS.map(({name}, i) => {
+        return currentChannel === i &&
+          <ChannelDetect name={name}
+                         txValues={txValues}
+                         detectedChannels={detectedChannels}
+                         onDetect={handleDetect}
+                         key={name} />
+      })}
 
-    {currentChannel < CHANNELS.length &&
-    <button onClick={handleNext} disabled={currentChannel === Object.keys(detectedChannels).length}>
-      Next
-    </button>}
 
-    {currentChannel === CHANNELS.length && <div>
-      <p>The following settings are ready to be applied:</p>
-      <ul>
-        <li>rxrange:
-          <ul>
-            {getRxRange().map(([min, max]) => <li>{`${min} - ${max}`}</li>)}
-          </ul>
-        </li>
-        <li>Channel mapping: {detectedChannelsToChannelMapping(detectedChannels)}</li>
-      </ul>
+      {currentChannel !== CHANNELS.length &&
+      <button onClick={handleRestart} className={cx(
+        styles.restartButton,
+        "button",
+        "button-outline"
+        )} >Restart</button>}
+
+      {currentChannel < CHANNELS.length &&
+      <button onClick={handleNext} disabled={currentChannel === Object.keys(detectedChannels).length} className={cx(
+        styles.nextButton,
+        'button'
+      )}>
+        Next
+      </button>}
     </div>
-    }
-
-    {!!currentChannel && currentChannel !== CHANNELS.length &&
-    <button onClick={handleRestart}>Restart</button>}
 
     {currentChannel === CHANNELS.length &&
-    <button onClick={handleApply}>Apply settings</button>}
+      <div>
+        <div>
+          <p>The following settings are ready to be applied:</p>
+          <ul>
+            <li>rxrange:
+              <ul>
+                {getRxRange().map(([min, max]) => <li>{`${min} - ${max}`}</li>)}
+              </ul>
+            </li>
+            <li>Channel mapping: {detectedChannelsToChannelMapping(detectedChannels)}</li>
+          </ul>
+        </div>
+        <button onClick={handleRestart} className={cx(
+          styles.restartButton,
+          "button",
+          "button-outline"
+        )}>Restart</button>
+
+        <button onClick={handleApply} className="button">Apply settings</button>
+      </div>
+    }
   </div>
 }

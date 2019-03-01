@@ -1,0 +1,17 @@
+body {
+
+}
+
+.App {
+  width: 1000px;
+  margin: 0 auto;
+  padding: 25px 0;
+}
+
+.App-header {
+
+}
+
+.MockMsp {
+  border-top: 1px solid gray;
+}

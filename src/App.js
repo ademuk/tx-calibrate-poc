@@ -4,7 +4,7 @@ import TX from './tx/Tx';
 import MockMsp from './msp/MockMsp';
 import {MockMspContextProvider} from './msp/MockMspContext';
 
-import './App.css';
+import styles from './App.module.css';
 
 
 export default () => {
@@ -19,15 +19,17 @@ export default () => {
 
   return (
     <MockMspContextProvider>
-      <div className="App">
+      <div className={styles.App}>
         <header className="App-header">
-          <h1>RX Calibrate</h1>
+          <h1>RX Calibration PoC</h1>
         </header>
         <Calibrator onStartCalibration={() => setShowTx(true)} txValues={txValue} />
 
-        {showTx && <TX values={txValue} onChange={setTxValue} />}
+        <div className={styles.MockMsp}>
+          {showTx && <TX values={txValue} onChange={setTxValue} />}
 
-        {<MockMsp />}
+          {<MockMsp />}
+        </div>
       </div>
     </MockMspContextProvider>
   )

@@ -18,6 +18,6 @@ export default ({name, txValues, detectedChannels, onDetect}) => {
   }
 
   return (
-    <p>Move {name} to extremes</p>
+    <p>Please move {name} to its extremes, then click next</p>
   )
 }
