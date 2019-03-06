@@ -23,12 +23,12 @@ export default () => {
         <header className="App-header">
           <h1>RX Calibration PoC</h1>
         </header>
-        <Calibrator onStartCalibration={() => setShowTx(true)} txValues={txValue} />
+        <Calibrator txValues={txValue} />
 
         <div className={styles.MockMsp}>
-          {showTx && <TX values={txValue} onChange={setTxValue} />}
+          <TX values={txValue} onChange={setTxValue} />
 
-          {<MockMsp />}
+          <MockMsp />
         </div>
       </div>
     </MockMspContextProvider>

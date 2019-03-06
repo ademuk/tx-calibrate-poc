@@ -1,0 +1,8 @@
+.MockMsp {
+  display: inline;
+}
+
+input.inlineInput {
+  display: inline;
+  width: 100px;
+}

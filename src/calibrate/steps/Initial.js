@@ -14,7 +14,7 @@ export default ({onStart}) => {
     if (!isRxRangeDefault(rxRanges)) {
       setRxRanges(rxRanges.map(() => [DEFAULT_RX_RANGE_MIN, DEFAULT_RX_RANGE_MAX]))
     }
-    onStart();
+    onStart && onStart();
   }
 
   return rxRanges === null ? 'Loading' : <div>

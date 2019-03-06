@@ -1,5 +1,6 @@
 import React from 'react';
 import useMsp from "./useMsp";
+import styles from './MockMsp.module.css';
 
 export default () => {
   const [rxRanges, setRxranges] = useMsp('rxrange');
@@ -17,24 +18,26 @@ export default () => {
     setChannelMapping(event.target.value)
   }
 
-  return (<div>
+  return (<div className={styles.MockMsp}>
     <div>
-    <h2>Mock MSP</h2>
-    <h3>rxrange</h3>
-    {rxRanges.map(([min, max], i) => {
-      return <div key={i}>
-        ch{i+1} <input value={min} onChange={handleRxRangeChange(i, 0)} type="number" />
-        -
-        <input value={max} onChange={handleRxRangeChange(i, 1)} type="number" />
-      </div>
-    })}
-    </div>
-    <div>
-      <h3>Channel mapping</h3>
+    <h3>MSP</h3>
+
+    <div style={{float: "right"}}>
+      <h4>Channel mapping</h4>
       <select value={channelMapping} onChange={onChannelMappingChange}>
         <option value="AETR1234">AETR (FrSky / Futaba / Hitec)</option>
         <option value="TAER1234">TAER (Spektrum / Graupner / JR)</option>
       </select>
+    </div>
+
+    <h4>rxrange</h4>
+    {rxRanges.map(([min, max], i) => {
+      return <div key={i}>
+        ch{i+1} <input value={min} onChange={handleRxRangeChange(i, 0)} type="number" className={styles.inlineInput} />
+        -
+        <input value={max} onChange={handleRxRangeChange(i, 1)} type="number" className={styles.inlineInput} />
+      </div>
+    })}
     </div>
   </div>)
 }

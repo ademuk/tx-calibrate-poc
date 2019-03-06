@@ -10,12 +10,11 @@ const steps = {
   DONE: 'done'
 };
 
-export default ({onStartCalibration, txValues}) => {
+export default ({txValues}) => {
   const [step, setStep] = useState('initial');
 
   function handleStartCalibration() {
     setStep(steps.CALIBRATE);
-    onStartCalibration();
   }
 
   function handleRestart() {

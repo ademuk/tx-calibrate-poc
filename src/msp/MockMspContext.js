@@ -3,7 +3,7 @@ import * as React from "react";
 export const MockMspContext = React.createContext();
 
 const DEFAULT_RXRANGE = [
-  [1000, 2001],
+  [1000, 2000],
   [1000, 2000],
   [1000, 2000],
   [1000, 2000]
