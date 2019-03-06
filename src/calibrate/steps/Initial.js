@@ -1,5 +1,6 @@
 import React from 'react';
 import useMsp from "../../msp/useMsp";
+import styles from './Initial.module.css';
 
 const DEFAULT_RX_RANGE_MIN = 1000;
 const DEFAULT_RX_RANGE_MAX = 2000;
@@ -24,7 +25,9 @@ export default ({onStart}) => {
       <li>Power up you receiver and transmitter (Don't forget to remove your props if applicable)</li>
     </ol>
 
-    <button onClick={handleStart} className="button">Start Calibration</button>
+    <div className={styles.buttons}>
+      <button onClick={handleStart} className="button">Start Calibration</button>
+    </div>
 
     {false && rxRanges.map(([min, max], i) => <div key={i}>{min} - {max}</div>)}
   </div>

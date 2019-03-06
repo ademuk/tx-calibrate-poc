@@ -94,8 +94,8 @@ export default ({txValues, onRestart, onDone}) => {
       return (
         <div key={i} className={styles.txChannelWrapper}>
           <div className={styles.txChannel}>
-            <div className={styles.min}>
-              {minVals[i]}
+            <div className={styles.matchedChannel}>
+              {channelIsAssigned > -1 && ` ✔ ${CHANNELS[channelIsAssigned].name}`}
             </div>
             <div className={styles.meter}>
               <div className={cx(
@@ -103,12 +103,6 @@ export default ({txValues, onRestart, onDone}) => {
                   styles[`fill${i}`]
                 )} style={{left: `${((minVals[i] - 1000) / 10)}%`, right: `${((2000 - maxVals[i]) / 10)}%`}}></div>
               <div class={styles.label}>{value}</div>
-            </div>
-            <div className={styles.max}>
-              {maxVals[i]}
-            </div>
-            <div className={styles.matchedChannel}>
-              {channelIsAssigned > -1 && ` ✔ ${CHANNELS[channelIsAssigned].name}`}
             </div>
           </div>
         </div>
