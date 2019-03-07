@@ -21,7 +21,9 @@ export default () => {
     <MockMspContextProvider>
       <div className={styles.App}>
         <header className="App-header">
-          <h1>RX Calibration PoC</h1>
+          <img src="https://raw.githubusercontent.com/wiki/betaflight/betaflight/images/betaflight/bf_logo.png"
+               style={{float: "right", width: "200px", padding: "2px 0 0 0"}} />
+          <h1>TX Calibration PoC</h1>
         </header>
         <Calibrator txValues={txValue} />
 
